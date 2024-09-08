@@ -1,10 +1,10 @@
 class DataController < ApplicationController
-  def index 
-    data = Data_item.all
-  end
-  def create
-    data = params[:data]
-    Rails.logger.info "Recieved data: #{data.inspect}"
-    render json: { status: 'Data recieved', data: data}, status: :ok
+  def index
+    @data_items = DataItem.all
+    render template: "data_items/index"
   end 
+  def show 
+    @data_item = DataItem.find_by(id: params[:id])
+    render template: "data_items/show"
+  end
 end

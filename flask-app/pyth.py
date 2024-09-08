@@ -1,16 +1,21 @@
-import json 
 import requests
+import pandas as pd
+import matplotlib.pyplot as plt
 
-url = "https://data.wa.gov/api/views/f6w7-q2d2/rows.json?accessType=DOWNLOAD"
+url = 'http://localhost:3000/data.json'
 
 response = requests.get(url)
+data = response.json()
 
+df = pd.DataFrame(data)
 
-if response.status_code == 200:
-  data = response.json()
-  with open('data.json', 'w') as file:
-    json.dump(data, file)
-  print("data saved")
-else:
-   print(f"failed")
+df['year'] = pd.to_numeric(df['year'], errors ='coerce')
+df['value'] = pd.to_numeric(df['value'], errors='coerce')
 
+plt.figure(figsize=(10,6))
+plt.plot(df['year'], df['value'], marker='o')
+plt.title('year vs value')
+plt.xlabel('year')
+plt.ylabel('value')
+plt.grid(True)
+plt.show()
